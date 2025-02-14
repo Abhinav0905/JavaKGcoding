@@ -1,0 +1,36 @@
+name: Daily Commit
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every day
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  create-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Create daily update
+        run: |
+          # Get current date
+          DATE=$(date '+%Y-%m-%d')
+          
+          # Create or update the daily log file
+          echo "Daily update: $DATE" >> daily-updates.txt
+          
+          # Configure Git
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Commit and push changes
+          git add daily-updates.txt
+          git commit -m "Daily update: $DATE"
+          git push

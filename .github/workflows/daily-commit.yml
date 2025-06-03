@@ -33,4 +33,4 @@ jobs:
           # Commit and push changes
           git add daily-updates.txt
           git commit -m "Daily update: $DATE"
-          git push origin
+          git push
